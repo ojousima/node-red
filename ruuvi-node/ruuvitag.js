@@ -67,10 +67,11 @@ var parseRawRuuvi = function(manufacturerDataString){
 
   let temperatureString = manufacturerDataString.substring(temperatureStart, temperatureEnd);
   let temperature = parseInt(temperatureString.substring(0, 2), 16);  //Full degrees
-  if(temperature > 128){
-    temperature -= 256; //two's complement
-  }
   temperature += parseInt(temperatureString.substring(2, 4), 16)/100; //Decimals
+  if(temperature > 128){           // Ruuvi format, sign bit + value
+    temperature = temperature-128; 
+    temperature = 0 - temperature; 
+  }
   robject.temperature = temperature;
 
   let pressure = parseInt(manufacturerDataString.substring(pressureStart, pressureEnd), 16);  // uint16_t pascals
