@@ -1,0 +1,35 @@
+<script type="text/javascript">
+    RED.nodes.registerType('ruuvitag',{
+        category: 'advanced',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "ruuvitag.png",
+        label: function() {
+            return this.name||"RuuviTag";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="lowercase">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="ruuvitag">
+    <p>Takes node-red-contrib-noble scan object as input and replaces payload with JSON containing parsed data from Ruuvitag.</p>
+    <p>Payload fields (i.e. msg.payload.) are temperature, humidity, pressure, accelerationX, accelerationX, accelerationX, battery. Units are:</p>
+    <ul>
+      <li>Temperature: Celcius</li>
+      <li>Humidity: RH-%</li>
+      <li>Pressure: Pascal</li>
+      <li>Acceleration: milli-G</li>
+      <li>Battery: mV</li>
+    </ul>
+    <p>You might also be interested in other noble message data, such as msg.rssi or msg.peripheralUUID</p>
+</script>
