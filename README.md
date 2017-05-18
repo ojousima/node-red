@@ -21,11 +21,13 @@ Then in your node red directory (typically ~/.node-red) run ` npm link node-red-
 
 Project additionally depends on node-red-contrib-noble, but there is no proper dependency management yet. 
 Run manually ` sudo npm install -g node-red-contrib-noble `. You also need bluetooth stack used by noble,
-for details please see (noble install instructions)[https://github.com/kmi/node-red-contrib-noble].
+for details please see [noble install instructions](https://github.com/kmi/node-red-contrib-noble).
 ## Usage
 Allow duplicates in noble configuration, and set scan=true to noble node. Connect noble output to RuuviTag input, 
 and parse RuuviTag data as you wish.
 
+![Example flow](./images/nodered_ruuvinode_flow.png)
+
 To setup physical RuuviTags in high-resolution binary mode, install latest "Weather Station" firmware and 
 press "B" once to enter into high resolution mode. Red Led should be blinking approximately once per second once youre in correct mode.
-For details please see (ruuvi website)[https://ruu.vi].
+For details please see [ruuvi website](https://ruu.vi).
