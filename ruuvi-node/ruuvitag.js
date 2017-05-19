@@ -72,7 +72,7 @@ var parseRawRuuvi = function(manufacturerDataString){
     temperature = temperature-128; 
     temperature = 0 - temperature; 
   }
-  robject.temperature = temperature;
+  robject.temperature = +temperature.toFixed(2); // Round to 2 decimals, format as a number
 
   let pressure = parseInt(manufacturerDataString.substring(pressureStart, pressureEnd), 16);  // uint16_t pascals
   pressure += 50000; //Ruuvi format
