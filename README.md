@@ -4,14 +4,14 @@ Node red trials, may or may not suit any purpose.
 # RuuviTag node
 ## About
 Listens to node-red-contrib-noble messages, and parses RuuviTag weather station data in high resolution mode.
-Puts sensor data to msg.payload as JSON, contains: temperature, humidity, pressure, accelerationX, accelerationX, accelerationX, battery. Units are:
+Puts sensor data to msg.payload as JSON, contains: temperature, humidity, pressure, accelerationX, accelerationY, accelerationZ, battery. Units are:
  - Temperature: Celcius
  - Humidity: RH-%
  - Pressure: Pascal
  - Acceleration: milli-G
  - Battery: mV
 
-Currently version 0.0.2, i.e. alpha-quality. All comments and suggestions are welcome, please open pull-requests (and comment that BSD-3 is ok) if you
+Currently version 0.0.3, i.e. alpha-quality. All comments and suggestions are welcome, please open pull-requests (and comment that BSD-3 is ok) if you
 want to contribute. Suggestions for improvement can be given as github issues.
 
 ## Installing
