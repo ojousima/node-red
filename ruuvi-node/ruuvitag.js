@@ -1,3 +1,4 @@
+"use strict";
 module.exports = function(RED) {
     function RuuviTagNode(config) {
         RED.nodes.createNode(this,config);
