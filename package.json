@@ -1,11 +1,14 @@
 {
-    "name"         : "node-red-contrib-ruuvitag",
-    "version"      : "0.0.2",
-    "description"  : "RuuviTag data parser",
+    "name": "node-red-contrib-ruuvitag",
+    "version": "0.0.2",
+    "description": "RuuviTag data parser",
     "dependencies": {
+        "noble": "^1.8.1"
     },
-    "keywords": [ "test" ],
-    "node-red"     : {
+    "keywords": [
+        "test"
+    ],
+    "node-red": {
         "nodes": {
             "ruuvitag": "ruuvi-node/ruuvitag.js"
         }

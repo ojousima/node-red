@@ -1,5 +1,6 @@
 "use strict";
-module.exports = function(RED) {
+var noble = require('noble');
+/*module.exports = function(RED) {
     function RuuviTagNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
@@ -19,6 +20,28 @@ module.exports = function(RED) {
     }
     RED.nodes.registerType("ruuvitag",RuuviTagNode);
 }
+*/
+
+//module.exports = function() {
+
+//            while(true){}
+//}
+
+noble.on('discover', function(msg) {
+  //console.log("Discover " + JSON.stringify(msg.advertisement));
+            //Expects noble manufacturer data
+            if(!msg.advertisement || !msg.advertisement.manufacturerData){
+              return null;
+              //console.log("Not ruuvitag");
+            }
+            let manufacturerDataString = msg.advertisement.manufacturerData.toString('hex');
+            let ruuviData = parseRuuviData(manufacturerDataString);
+            if(!ruuviData){
+              return null;
+            }
+            msg.payload = JSON.stringify(ruuviData);
+            console.log(msg.payload);
+            });
 
 var parseRuuviData = function(manufacturerDataString){
 
@@ -97,3 +120,14 @@ var parseRawRuuvi = function(manufacturerDataString){
 
   return robject;
 }
+
+noble.on('stateChange', function(state) {
+  console.log("State")
+  if (state === 'poweredOn') {
+      console.log("poweredOn")
+    noble.startScanning([], true);
+  } else {
+    noble.stopScanning();
+      console.log("other")
+  }
+});
