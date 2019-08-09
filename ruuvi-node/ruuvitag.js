@@ -157,7 +157,7 @@ var parseRawV2Ruuvi = function(manufacturerDataString) {
     robject.accelerationY = accelerationY;
     robject.accelerationZ = accelerationZ;
 
-    let powerInfoString = manufacturerDataString.substring(powerInfoString, powerInfoEnd);
+    let powerInfoString = manufacturerDataString.substring(powerInfoStart, powerInfoEnd);
     let battery = (parseInt(powerInfoString, 16) >> 5) + 1600; // millivolts > 1600
     let txpower = (parseInt(powerInfoString, 16) & 0x001F) - 40; // dB > -40
     robject.battery = battery;
