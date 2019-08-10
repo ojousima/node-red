@@ -126,18 +126,16 @@ var parseRawV2Ruuvi = function(manufacturerDataString) {
     let movementCounterEnd = 36;
     let sequenceCounterStart = 36;
     let sequenceCounterEnd = 40;
-    let macAddressStart = 40;
-    let macAddressEnd = 52;
 
     let robject = {};
 
     let temperatureString = manufacturerDataString.substring(temperatureStart, temperatureEnd);
     let temperature = parseInt(temperatureString, 16); // 0.005 degrees
-    robject.temperature = (temperature / 200).toFixed(2);
+    robject.temperature = +(temperature / 200).toFixed(2);
 
     let humidityString = manufacturerDataString.substring(humidityStart, humidityEnd);
-    let humidity = parseInt(humidityStart, 16); // 0.0025%
-    robject.humidity = (humidity / 400).toFixed(2);
+    let humidity = parseInt(humidityString, 16); // 0.0025%
+    robject.humidity = +(humidity / 400).toFixed(2);
 
     let pressure = parseInt(manufacturerDataString.substring(pressureStart, pressureEnd), 16); // uint16_t pascals
     pressure += 50000; //Ruuvi format
@@ -170,9 +168,6 @@ var parseRawV2Ruuvi = function(manufacturerDataString) {
     let sequenceCounterString = manufacturerDataString.substring(sequenceCounterStart, sequenceCounterEnd);
     let sequenceCounter = parseInt(sequenceCounterString, 16);
     robject.sequenceCounter = sequenceCounter;
-
-    let macAddressString = manufacturerDataString.substring(macAddressStart, macAddressEnd);
-    robject.macAddress = macAddressString;
 
     return robject;
 }
