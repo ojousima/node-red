@@ -9,6 +9,18 @@ module.exports = function(RED) {
                 return null;
             }
             let manufacturerDataString = msg.advertisement.manufacturerData.toString('hex');
+
+            let manufacturerIdStart = 0;
+            let manufacturerIdEnd = 4;
+
+            // Ruuvi manufacturer ID is 0x0499 but is little endian for some reason
+            let ruuviTagId = "9904";
+
+            // Ignore any non-Ruuvi tags
+            if (manufacturerDataString.substring(manufacturerIdStart, manufacturerIdEnd) != ruuviTagId) {
+                return null;
+            }
+
             let ruuviData = parseRuuviData(manufacturerDataString);
             if (!ruuviData) {
                 return null;

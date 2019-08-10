@@ -17,11 +17,10 @@ temperature, humidity, pressure, accelerationX, accelerationY, accelerationZ, ba
 
 *RAWv2*
 
-adds txPower, movementCounter, sequenceCounter, and macAddress. Units are:
+adds txPower, movementCounter, and sequenceCounter. Units are:
  - txPower: dB
  - movementCounter: incremented rolling number with movement
  - sequenceCounter: incremented sequence counter
- - macAddress: mac address of device
 
 Currently version 0.1.0, i.e. alpha-quality. All comments and suggestions are welcome, please open pull-requests (and comment that BSD-3 is ok) if you
 want to contribute. Suggestions for improvement can be given as github issues.
