@@ -42,6 +42,5 @@ and parse RuuviTag data as you wish.
 
 ![Example flow](./images/nodered_ruuvinode_flow.png)
 
-To setup physical RuuviTags in high-resolution binary mode, install latest "Weather Station" firmware and
-press "B" once to enter into high resolution mode. Red Led should be blinking approximately once per second once your tag is in correct mode.
-For details please see (ruuvi website)[https://ruu.vi].
+If you want to use RAWv2 mode, install firmware version [2.4.2](lab.ruuvi.com/dfu) and press button "B" once to enter the RAWv2 mode on RuuviTag.
+For more details please see [ruuvi website](https://ruu.vi).
