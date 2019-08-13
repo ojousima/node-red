@@ -9,6 +9,18 @@ module.exports = function(RED) {
                 return null;
             }
             let manufacturerDataString = msg.advertisement.manufacturerData.toString('hex');
+
+            let manufacturerIdStart = 0;
+            let manufacturerIdEnd = 4;
+
+            // Ruuvi manufacturer ID is 0x0499 but is little endian for some reason
+            let ruuviTagId = "9904";
+
+            // Ignore any non-Ruuvi tags
+            if (manufacturerDataString.substring(manufacturerIdStart, manufacturerIdEnd) != ruuviTagId) {
+                return null;
+            }
+
             let ruuviData = parseRuuviData(manufacturerDataString);
             if (!ruuviData) {
                 return null;
@@ -30,12 +42,16 @@ var parseRuuviData = function(manufacturerDataString) {
 
     let formatStart = 4;
     let formatEnd = 6;
-    let formatRAW = "03";
+    let formatRawV1 = "03";
+    let formatRawV2 = "05";
     let dataFormat = manufacturerDataString.substring(formatStart, formatEnd);
     let dataObject = {};
     switch (dataFormat) {
-        case formatRAW:
-            dataObject = parseRawRuuvi(manufacturerDataString)
+        case formatRawV1:
+            dataObject = parseRawV1Ruuvi(manufacturerDataString)
+            break;
+        case formatRawV2:
+            dataObject = parseRawV2Ruuvi(manufacturerDataString)
             break;
 
         default:
@@ -47,7 +63,7 @@ var parseRuuviData = function(manufacturerDataString) {
 }
 
 //https://github.com/ruuvi/ruuvi-sensor-protocols
-var parseRawRuuvi = function(manufacturerDataString) {
+var parseRawV1Ruuvi = function(manufacturerDataString) {
     let humidityStart = 6;
     let humidityEnd = 8;
     let temperatureStart = 8;
@@ -99,6 +115,71 @@ var parseRawRuuvi = function(manufacturerDataString) {
 
     let battery = parseInt(manufacturerDataString.substring(batteryStart, batteryEnd), 16); // milli-g
     robject.battery = battery;
+
+    return robject;
+}
+
+var parseRawV2Ruuvi = function(manufacturerDataString) {
+    let temperatureStart = 6;
+    let temperatureEnd = 10;
+    let humidityStart = 10;
+    let humidityEnd = 14;
+    let pressureStart = 14;
+    let pressureEnd = 18;
+    let accelerationXStart = 18;
+    let accelerationXEnd = 22;
+    let accelerationYStart = 22;
+    let accelerationYEnd = 26;
+    let accelerationZStart = 26;
+    let accelerationZEnd = 30;
+    let powerInfoStart = 30;
+    let powerInfoEnd = 34;
+    let movementCounterStart = 34;
+    let movementCounterEnd = 36;
+    let sequenceCounterStart = 36;
+    let sequenceCounterEnd = 40;
+
+    let robject = {};
+
+    let temperatureString = manufacturerDataString.substring(temperatureStart, temperatureEnd);
+    let temperature = parseInt(temperatureString, 16); // 0.005 degrees
+    robject.temperature = +(temperature / 200).toFixed(2);
+
+    let humidityString = manufacturerDataString.substring(humidityStart, humidityEnd);
+    let humidity = parseInt(humidityString, 16); // 0.0025%
+    robject.humidity = +(humidity / 400).toFixed(2);
+
+    let pressure = parseInt(manufacturerDataString.substring(pressureStart, pressureEnd), 16); // uint16_t pascals
+    pressure += 50000; //Ruuvi format
+    robject.pressure = pressure;
+
+    // acceleration values in milli-Gs
+    let accelerationX = parseInt(manufacturerDataString.substring(accelerationXStart, accelerationXEnd), 16); // milli-g
+    if (accelerationX > 32767) { accelerationX -= 65536; } //two's complement
+
+    let accelerationY = parseInt(manufacturerDataString.substring(accelerationYStart, accelerationYEnd), 16); // milli-g
+    if (accelerationY > 32767) { accelerationY -= 65536; } //two's complement
+
+    let accelerationZ = parseInt(manufacturerDataString.substring(accelerationZStart, accelerationZEnd), 16); // milli-g
+    if (accelerationZ > 32767) { accelerationZ -= 65536; } //two's complement
+
+    robject.accelerationX = accelerationX;
+    robject.accelerationY = accelerationY;
+    robject.accelerationZ = accelerationZ;
+
+    let powerInfoString = manufacturerDataString.substring(powerInfoStart, powerInfoEnd);
+    let battery = (parseInt(powerInfoString, 16) >> 5) + 1600; // millivolts > 1600
+    let txpower = (parseInt(powerInfoString, 16) & 0x001F) - 40; // dB > -40
+    robject.battery = battery;
+    robject.txPower = txpower;
+
+    let movementCounterString = manufacturerDataString.substring(movementCounterStart, movementCounterEnd);
+    let movementCounter = parseInt(movementCounterString, 16);
+    robject.movementCounter = movementCounter;
+
+    let sequenceCounterString = manufacturerDataString.substring(sequenceCounterStart, sequenceCounterEnd);
+    let sequenceCounter = parseInt(sequenceCounterString, 16);
+    robject.sequenceCounter = sequenceCounter;
 
     return robject;
 }
