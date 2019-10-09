@@ -2,7 +2,7 @@
 Node red trials, probably does not suit any purpose.
 
 ## Node version
-Note: This project relies on [Noble](https://github.com/noble/noble) which is not maintained. by the original author(s). 
+Note: This project relies on [Noble](https://github.com/noble/noble) which is not maintained by the original author(s). 
 You're probably going to have bad time if you're trying to run this code on NodeJS 10, and you might have some luck with NodeJS 8. Anyway, this project won't be maintained until the issues with NodeJS / Noble are cleared out. Feel free to open a pull request which works with [Abandonware Noble](https://www.npmjs.com/package/@abandonware/noble) or some other BLE backend if you happen to make one. 
 
 # RuuviTag node
