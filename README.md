@@ -1,9 +1,11 @@
 # node-red
-Node red trials, probably does not suit any purpose.
+Node-Red node that relies on [Noble](https://www.npmjs.com/package/@abandonware/noble) which outputs measurements from a 
+[RuuviTag®](https://ruuvi.com) For example 
+
+`{"temperature":19.87,"humidity":45.72,"pressure":100430,"accelerationX":4,"accelerationY":100,"accelerationZ":1032,"battery":3133,"txPower":-18,"movementCounter":10,"sequenceCounter":12560,"mac":"c9:xx:xx:c7:aa:cb"}`
 
 ## Node version
-Note: This project relies on [Noble](https://github.com/noble/noble) which is not maintained by the original author(s). 
-You're probably going to have bad time if you're trying to run this code on NodeJS 10, and you might have some luck with NodeJS 8. Anyway, this project won't be maintained until the issues with NodeJS / Noble are cleared out. Feel free to open a pull request which works with [Abandonware Noble](https://www.npmjs.com/package/@abandonware/noble) or some other BLE backend if you happen to make one. 
+Following the install instructions below it will work with Node.js up to v12
 
 # RuuviTag node
 ## About
@@ -26,19 +28,29 @@ adds txPower, movementCounter, and sequenceCounter. Units are:
  - movementCounter: incremented rolling number with movement
  - sequenceCounter: incremented sequence counter
 
-Currently version 0.1.0, i.e. alpha-quality. All comments and suggestions are welcome, please open pull-requests (and comment that BSD-3 is ok) if you
-want to contribute. Suggestions for improvement can be given as github issues.
+Currently version 0.1.0, i.e. alpha-quality. All comments and suggestions are welcome, please open pull-requests (and comment that BSD-3 is ok) if you want to contribute. Suggestions for improvement can be given as github issues.
 
-## Installing
-Clone the repository to you computer, and in the root of project (i.e. folder with package.json) run
-`sudo npm link `.
-Then in your node red directory (typically ~/.node-red) run ` npm link node-red-contrib-ruuvitag `.
+## Installing on a Raspberry Pi
 
-Project additionally depends on node-red-contrib-noble, but there is no proper dependency management yet.
-Run manually ` sudo npm install -g node-red-contrib-noble `. You also need bluetooth stack used by noble,
-for details please see [noble install instructions](https://github.com/kmi/node-red-contrib-noble).
+After a [Node-red installation](https://nodered.org/docs/getting-started/raspberrypi) check the Bluetooth interface with 
 
-Please update your machine if you're having syntax errors, see issue #1 for details.
+`hciconfig`
+
+Install dependencies
+
+`sudo apt install libbluetooth-dev libudev-dev git`
+
+Install the `noble` package, the latest updated `node-red-contrib-noble` node and this `node-red-contrib-ruuvitag` node
+
+`cd ~/.node-red`
+
+`npm install @abandonware/noble`
+
+`npm install MatsA/node-red-contrib-noble`
+
+`npm install ojousima/node-red`
+
+Restart Node-Red, `sudo systemctl restart nodered`, and check the installed Nodes via the Node-Red GUI. It will appear in the Node list below "advanced"
 
 ## Usage
 Allow duplicates in noble configuration, and set scan=true to noble node. Connect noble output to RuuviTag input,
