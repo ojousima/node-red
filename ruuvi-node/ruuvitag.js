@@ -142,8 +142,11 @@ var parseRawV2Ruuvi = function(manufacturerDataString) {
     let robject = {};
 
     let temperatureString = manufacturerDataString.substring(temperatureStart, temperatureEnd);
-    let temperature = parseInt(temperatureString, 16); // 0.005 degrees
-    robject.temperature = +(temperature / 200).toFixed(2);
+    let temperature = parseInt(temperatureString, 16);
+
+    if ((temperature & 0x8000) > 0) { temperature = temperature - 0x10000; } // two's complement
+
+    robject.temperature = +(temperature / 200).toFixed(2); // 0.005 degrees
 
     let humidityString = manufacturerDataString.substring(humidityStart, humidityEnd);
     let humidity = parseInt(humidityString, 16); // 0.0025%
@@ -155,13 +158,13 @@ var parseRawV2Ruuvi = function(manufacturerDataString) {
 
     // acceleration values in milli-Gs
     let accelerationX = parseInt(manufacturerDataString.substring(accelerationXStart, accelerationXEnd), 16); // milli-g
-    if (accelerationX > 32767) { accelerationX -= 65536; } //two's complement
+    if ((accelerationX & 0x8000) > 0) { accelerationX -= 0x10000; } // two's complement
 
     let accelerationY = parseInt(manufacturerDataString.substring(accelerationYStart, accelerationYEnd), 16); // milli-g
-    if (accelerationY > 32767) { accelerationY -= 65536; } //two's complement
+    if ((accelerationY & 0x8000) > 0) { accelerationY -= 0x10000; } // two's complement
 
     let accelerationZ = parseInt(manufacturerDataString.substring(accelerationZStart, accelerationZEnd), 16); // milli-g
-    if (accelerationZ > 32767) { accelerationZ -= 65536; } //two's complement
+    if ((accelerationZ & 0x8000) > 0) { accelerationZ -= 0x10000; } // two's complement
 
     robject.accelerationX = accelerationX;
     robject.accelerationY = accelerationY;
