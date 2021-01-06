@@ -4,11 +4,24 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         var node = this;
         node.on('input', function(msg) {
-            //Expects noble manufacturer data
+            var manufacturerDataString = "";
+            var mqttPayload = {};
+            var isMqtt = false;
+
+            // Check if message input is from noble.
             if (!msg.advertisement || !msg.advertisement.manufacturerData) {
-                return null;
+                // Message is not from noble, see if it's from the Ruuvi Gateway via MQTT.
+                if (!msg.topic || !msg.payload) {
+                    return null;
+                } else {
+                    isMqtt = true;
+                    let mqttManufacturerStringStart = 10;
+                    mqttPayload = JSON.parse(msg.payload);
+                    manufacturerDataString = mqttPayload.data.substring(mqttManufacturerStringStart);
+                }
+            } else {
+                manufacturerDataString = msg.advertisement.manufacturerData.toString('hex');
             }
-            let manufacturerDataString = msg.advertisement.manufacturerData.toString('hex');
 
             let manufacturerIdStart = 0;
             let manufacturerIdEnd = 4;
@@ -25,12 +38,27 @@ module.exports = function(RED) {
             if (!ruuviData) {
                 return null;
             }
-            ruuviData.mac = parseMacAddress(msg.peripheralUuid);
+
+            if (isMqtt) {
+                ruuviData.mac = parseMacFromMqttTopic(msg.topic);
+            } else {
+                ruuviData.mac = parseMacAddress(msg.peripheralUuid);
+            }
+
             msg.payload = JSON.stringify(ruuviData);
             node.send(msg);
         });
     }
     RED.nodes.registerType("ruuvitag", RuuviTagNode);
+}
+
+var parseMacFromMqttTopic = function(topic) {
+    let macFound = topic.match(/(?:[0-9a-fA-F]:?){12}/g);
+    if (!macFound) {
+        return "";
+    } else {
+        return macFound[0];
+    }
 }
 
 var parseMacAddress = function(peripheralUuid) {
