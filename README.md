@@ -1,6 +1,6 @@
 # node-red
-Node-Red node that relies on [Noble](https://www.npmjs.com/package/@abandonware/noble) which outputs measurements from a 
-[RuuviTag®](https://ruuvi.com) For example 
+Node-Red node that handles [Noble](https://www.npmjs.com/package/@abandonware/noble) Bluetooth Low Energy outputs from a 
+[RuuviTag®](https://ruuvi.com) directly, or accepts MQTT output from the Ruuvi Gateway.  Example output: 
 
 `{"temperature":19.87,"humidity":45.72,"pressure":100430,"accelerationX":4,"accelerationY":100,"accelerationZ":1032,"battery":3133,"txPower":-18,"movementCounter":10,"sequenceCounter":12560,"mac":"c9:xx:xx:c7:aa:cb"}`
 
@@ -9,7 +9,7 @@ Following the install instructions below it will work with Node.js up to v12
 
 # RuuviTag node
 ## About
-Listens to node-red-contrib-noble messages, and parses RuuviTag weather station data in high resolution mode.
+Listens to node-red-contrib-noble messages or Ruuvi Gateway MQTT messages, and parses RuuviTag weather station data in high resolution mode.
 Puts sensor data to msg.payload as JSON, and depending on which [Ruuvi format](https://github.com/ruuvi/ruuvi-sensor-protocols) used, contains:
 
 *RAWv1*
