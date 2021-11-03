@@ -5,7 +5,7 @@ Node-Red node that handles [Noble](https://www.npmjs.com/package/@abandonware/no
 `{"temperature":19.87,"humidity":45.72,"pressure":100430,"accelerationX":4,"accelerationY":100,"accelerationZ":1032,"battery":3133,"txPower":-18,"movementCounter":10,"sequenceCounter":12560,"mac":"c9:xx:xx:c7:aa:cb"}`
 
 ## Node version
-Following the install instructions below it will work with Node.js up to v12
+Following the install instructions below it will work with Node.js up to v16
 
 # RuuviTag node
 ## About
@@ -39,6 +39,10 @@ After a [Node-red installation](https://nodered.org/docs/getting-started/raspber
 Install dependencies
 
 `sudo apt install libbluetooth-dev libudev-dev git`
+
+Grant the node binary "cap_net_raw" privileges, so it can start/stop BLE advertising, with command
+
+`sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)`
 
 Install the `noble` package, the latest updated `node-red-contrib-noble` node and this `node-red-contrib-ruuvitag` node
 
